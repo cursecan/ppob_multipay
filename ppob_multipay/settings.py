@@ -140,7 +140,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'env_root', 'static_root')
 
 LOGIN_REDIRECT_URL = 'userprofile:list_profile'
-LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 
 

@@ -62,7 +62,7 @@ class ProfileDetailControlView(SingleObjectMixin, ListView):
     template_name = 'userprofile/pg-profile-detail-control.html'
     slug_url_kwarg = 'guid'
     slug_field = 'guid'
-    paginate_by = 20
+    paginate_by = 10
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object(queryset=Profile.objects.all())

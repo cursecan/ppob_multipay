@@ -15,6 +15,7 @@ from core.decorators import superuser_required
 @method_decorator(login_required, name='dispatch')
 @method_decorator(superuser_required, name='dispatch')
 class ProductView(ListView):
+    paginate_by = 10
     template_name = 'instanpay/pg-product.html'
     context_object_name = 'product_list'
 
