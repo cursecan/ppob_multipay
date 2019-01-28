@@ -1,0 +1,25 @@
+<i class="close icon"></i>
+<div class="content">
+    <form action="{% url 'payment:manual_payment' profile.guid %}" class="ui form" method="post">
+        {% csrf_token %}
+        <div class="field disabled">
+            <label for="{{ form.sender.id_for_label }}">Sender</label>
+            <div class="ui input">
+                {{ form.sender }}
+            </div>
+        </div>
+        <div class="field">
+            <label for="{{ form.amount.id_for_label }}">Amount</label>
+            <div class="ui labeled focused input">
+                <div class="ui label">IDR</div>
+                {{ form.amount }}
+            </div>
+            {% if form.amount.errors %}
+                {% for error in form.amount.errors %}
+                <small style="color:brown">* {{ error }}</small>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <button class="ui red button" type="submit">Submit</button>
+    </form>
+</div>

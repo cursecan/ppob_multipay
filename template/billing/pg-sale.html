@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sale & Transaction
+{% endblock %}
+{% load templatehelpers %}
+
+{% block content %}
+<div class="ui vertical segment">
+    <div class="ui container">
+        <div class="ui stackable grid">
+            <div class="row">
+                <div class="column">
+                    <div class="ui menu">
+                        <div class="item">
+                            <div class="ui dropdown">
+                                <i class="filter icon"></i>
+                                <div class="text">Filter</div>
+                                <div class="menu">
+                                    <div class="item">
+                                        <form action="" class="ui inline form">
+                                            <div class="field">
+                                                <label for="">Start Date</label>
+                                                <input type="text" name="sdate" placeholder="yyyy-mm-dd">
+                                            </div>
+                                            <div class="field">
+                                                <label for="">End Date</label>
+                                                <input type="text" name="edate" placeholder="yyyy-mm-dd">
+                                            </div>
+                                            <div class="field">
+                                                <label for="">ID / Customer Number</label>
+                                                <div class="ui input">
+                                                    <input type="text" name="search" placeholder="Search transaction...">
+                                                </div>
+                                            </div>
+                                            <button class="ui button">Search</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <div class="ui top attached clearing segment">
+                        <h4 class="ui left floated header">Billing Transaction</h4>
+                        <div class="ui right floated header">
+                            <a title="Download CSV" href="{% url 'billing:export_sale' %}?{{ request.GET.urlencode }}"><i class="download icon"></i></a>
+                        </div>
+                    </div>
+                    <table class="ui attached table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>No.Customer</th>
+                                <th>Info</th>
+                                <th>Price</th>
+                                <th>Commision</th>
+                                <th>Profit</th>
+                                <th>Buyer</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in sale_list %}
+                            <tr>
+                                <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+                                <td>{{ sale.get_trx.customer }}</td>
+                                <td>
+                                    {{ sale.get_trx.trx_code }} <br>
+                                    {{ sale.get_trx.product.product_name }}
+                                </td>
+                                <td>{{ sale.credit }}</td>
+                                <td>{% if sale.get_trx.profit.return_back %} 0 {% else %} {{ sale.get_trx.commision }}{% endif %}</td>
+                                <td>{{ sale.get_trx.profit.profit }}</td>
+                                <td>{{ sale.user }}</td>
+                                <td>{{ sale.get_trx.get_status_display }}</td>
+                                <td>{{ sale.timestamp }}</td>
+                                <td><a class="disabled" href="">Link</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="10">Empty data</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% if is_paginated %}
+                <div class="row">
+                    <div class="column">
+                        <div class="ui pagination menu">
+                            {% for i in page_obj.paginator.page_range %}
+                                {% if i == page_obj.number %}
+                                <div class="item active">{{ i }}</div>
+                                {% else %}
+                                <a class="item" href="{% relative_url i 'page' request.GET.urlencode %}">{{ i }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

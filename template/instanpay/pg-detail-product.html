@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Product Detail
+{% endblock %}
+
+{% block content %}
+<div class="ui vertical segment">
+    <div class="ui container">
+        <div class="ui stackable grid">
+            <div class="row">
+                <div class="column">
+                    <div class="ui breadcrumb">
+                        <a href="{% url 'instanpay:product' %}" class="section">Product</a>
+                        <div class="divider"> / </div>
+                        <div class="active section">{{ product.code }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <table class="ui celled basic table">
+                        <thead>
+                            <tr>
+                                <th class="four wide">Product Code</th>
+                                <th>{{ product.code }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Product Name</td>
+                                <td>{{ product.product_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Group</td>
+                                <td>{{ product.group }}</td>
+                            </tr>
+                            <tr>
+                                <td>Operator</td>
+                                <td>{{ product.operator }}</td>
+                            </tr>
+                            <tr>
+                                <td>Subtype</td>
+                                <td>{{ product.get_subtype_display }}</td>
+                            </tr>
+                            <tr>
+                                <td>Nominal</td>
+                                <td>{{ product.nominal }}</td>
+                            </tr>
+                            <tr>
+                                <td>Price</td>
+                                <td>{{ product.price }}</td>
+                            </tr>
+                            <tr>
+                                <td>Commision</td>
+                                <td>{{ product.commision }}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>{{ product.is_active }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="left aligned">
+                                    <a href="{% url 'instanpay:update_product' product.id %}"><i class="edit icon"></i> Modify</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

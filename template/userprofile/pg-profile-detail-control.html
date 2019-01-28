@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+User Profile Control
+{% endblock %}
+
+{% block content %}
+<div class="ui vertical segment">
+    <div class="ui container">
+        <div class="ui stackable grid">
+            <div class="row">
+                <div class="column">
+                    <div class="ui breadcrumb">
+                        <a href="{% url 'userprofile:user_control' %}" class="section">User Control</a>
+                        <div class="divider">/</div>
+                        <div class="section active">{{ profile.user.email }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="four wide column">
+                    <div class="ui segments">
+                        <div class="ui segment">
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="content">
+                                        <div class="header">Email</div>
+                                        {{ profile.user.email }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment">
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="content">
+                                        <div class="header">Fullname</div>
+                                        {{ profile.get_fullname|title }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment">
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="content">
+                                        <div class="header">Saldo</div>
+                                        {{ profile.get_saldo|floatformat:0|intcomma }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment">
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="content">
+                                        <div class="header">Limit</div>
+                                        {{ profile.get_limit|floatformat:0|intcomma }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment">
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="content">
+                                        <div class="header">Loan</div>
+                                        {{ profile.wallet.loan|floatformat:0|intcomma }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="twelve wide column">
+                    <div class="ui top attached clearing segment">
+                        <h3 class="ui left floated header">
+                            LOAN
+                            <div class="sub header">IDR {{ total_loan|intcomma }}</div>
+                        </h3>
+                        {% if total_loan > 0 %}
+                        <form action="" method="post" class="ui form">
+                            {% csrf_token %}
+                            <button style="border-radius:20px" class="ui right floated labeled icon red small button">
+                                <i class="erase icon"></i> Clearing!
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    <table class="ui bottom attached table">
+                        <tbody>
+                            {% for kliring in kliring_list %}
+                            <tr>
+                                <td>
+                                    <div class="ui items">
+                                        <div class="item">
+                                            <div class="content">
+                                                <div class="meta">
+                                                    {{ kliring.timestamp }}
+                                                </div>
+                                                <div class="description">
+                                                    Pembelian {{ kliring.get_trx.product.product_name }} u/ {{ kliring.get_trx.customer }}
+                                                </div>
+                                                <div class="meta" style="{% if not is_clean %} color:brown {% endif %}">
+                                                    <i>Loan IDR {{ kliring.loan|floatformat:0|intcomma }}</i> -
+                                                    <i>Paid IDR {{ kliring.payment|floatformat:0|intcomma }}</i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td>
+                                    <div class="ui items">
+                                        <div class="item">
+                                            <div class="content">
+                                                -
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

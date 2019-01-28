@@ -1,0 +1,59 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Semantic Css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'main/main.css' %}">
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <div class="ui sidebar vertical inverted blue menu">
+        <div class="item">
+            <div class="header">PPOB Multipay</div>
+            <div class="menu">
+                <a href="{% url 'instanpay:product' %}" class="item">Product</a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="header">PPOB</div>
+            <div class="menu">
+                <a href="" class="item">Inquery</a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="header">Billing</div>
+            <div class="menu">
+                <a href="{% url 'billing:list_sale' %}" class="item">Sale</a>
+            </div>
+        </div>
+        <a href="{% url 'userprofile:list_profile' %}" class="item">User Profile</a>
+        <a href="{% url 'userprofile:user_control' %}" class="item">Profile Control</a>
+    </div>
+    <div class="pusher">
+        {% include 'header.html' %}
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div class="ui modal">
+        <!-- Modal Content -->
+    </div>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Semantic -->
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <!-- JS -->
+    <script src="{% static 'main/main.js' %}"></script>
+
+    {% block js %}
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Product
+{% endblock %}
+
+{% block content %}
+<div class="ui vertical segment">
+    <div class="ui container">
+        <div class="ui stackable grid">
+            <div class="row">
+                <div class="column">
+                    <div class="ui menu">
+                        <div class="item">
+                            <div class="ui product dropdown">
+                                <div class="text">All</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <a href="?subtype=" class="item">All</a>
+                                    <a href="?subtype=I" class="item">Instan Product</a>
+                                    <a href="?subtype=Q" class="item">Inquery Product</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <div class="ui top attached segment">
+                        <h4 class="ui header">Product</h4>
+                    </div>
+                    <table class="ui attached table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Product Name</th>
+                                <th>Code</th>
+                                <th>Group</th>
+                                <th>Subtype</th>
+                                <th>Price</th>
+                                <th>Commision</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in product_list %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a href="{{ product.get_absolute_url }}">{{ product.product_name }}</a></td>
+                                <td>{{ product.code }}</td>
+                                <td>{{ product.group }} <br>{{ product.operator }}</td>
+                                <td>{{ product.get_subtype_display }}</td>
+                                <td>{{ product.price }}</td>
+                                <td>{{ product.commision }}</td>
+                                <td>{{ product.is_active }}</td>
+                                <td>
+                                    <a href="{% url 'instanpay:update_product' product.id %}">
+                                        <i class="edit icon"></i> Edit
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

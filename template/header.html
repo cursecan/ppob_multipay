@@ -1,0 +1,27 @@
+<div class="ui inverted blue vertical segment">
+    <div class="ui inverted blue large secondary menu container">
+        <a id="headbars" class="item"><i class="bars icon"></i></a>
+        <div class="item header">
+            PPOB Multipay
+        </div>
+        <div class="right menu">
+            {% if request.user.is_authenticated %}
+            <div class="item text">
+                <i class="user icon"></i>
+                {{ request.user.email }}
+            </div>
+            <a href="{% url 'logout' %}" class="item text">
+                <i class="logout icon"></i>
+                Logout
+            </a>
+            {% else %}
+            <div class="item">
+                <button class="ui button">Register</button>
+            </div>
+            <div class="item">
+                <button class="ui button">Login</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

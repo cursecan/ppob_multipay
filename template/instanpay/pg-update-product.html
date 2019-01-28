@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Modify Product
+{% endblock %}
+
+{% block content %}
+<div class="ui vertical segment">
+    <div class="ui container">
+        <div class="ui stackable grid">
+            <div class="row">
+                <div class="column">
+                    <div class="ui breadcrumb">
+                        <a href="{% url 'instanpay:product' %}" class="section">Product</a>
+                        <div class="divider">/</div>
+                        <div class="section">{{ form.instance.code }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <form action="" class="ui form" method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+                        <button class="ui primary button" type="submit">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

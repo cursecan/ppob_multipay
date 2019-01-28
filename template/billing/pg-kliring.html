@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="ui vertical segment">
+    <div class="ui container">
+        <div class="ui stackable grid">
+            <div class="row">
+                <div class="column">
+                    <table class="ui table">
+                        <tbody>
+                            {% for kliring in kliring_list %}
+                            <tr>
+                                <td>{{ kliring.get_trx }}</td>
+                                <td>{{ kliring.get_trx.product.product_name }}</td>
+                                <td>{{ kliring.loan }}</td>
+                                <td>{{ kliring.buyer }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

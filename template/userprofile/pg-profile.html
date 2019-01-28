@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="ui vertical segment">
+    <div class="ui container">
+        <div class="ui stackabel grid">
+            <div class="row">
+                <div class="column">
+                    <div class="ui menu">
+                        <div class="item">
+                            <form action="">
+                                <div class="field">
+                                    <div class="ui action input">
+                                        <input type="text" name="search" placeholder="Search email..">
+                                        <button class="ui button">
+                                            <i class="search icon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <div class="ui top attached segment">
+                        <h4 class="ui header">Profile User</h4>
+                    </div>
+                    <table class="ui attached table" id="usertb">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Saldo</th>
+                                <th>Limit</th>
+                                <th>Loan</th>
+                                <th>Commision</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for profile in profile_list %}
+                            <tr>
+                                <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+                                <td>
+                                    {{ profile.get_profile_type_display }} <br>
+                                    {{ profile.user }}
+                                </td>
+                                <td> {{ profile.wallet.saldo|floatformat:0|intcomma }}</td>
+                                <td>{{ profile.wallet.limit|floatformat:0|intcomma }}</td>
+                                <td>{{ profile.wallet.loan|floatformat:0|intcomma }}</td>
+                                <td>{{ profile.wallet.commision|floatformat:0|intcomma }}</td>
+                                <td class="right aligned">
+                                    <div class="ui dropdown">
+                                        <div class="text">Action</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <a target-url="{% url 'payment:manual_payment' profile.guid %}" class="item">
+                                                <i class="add icon"></i> Add Saldo
+                                            </a>
+                                            <a target-url="{% url 'userprofile:limit' profile.guid %}" class="item">
+                                                <i class="pencil icon"></i> Modify Limit
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6">Empty</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% if is_paginated %}
+                <div class="row">
+                    <div class="column">
+                        <div class="ui pagination menu">
+                            {% for i in page_obj.paginator.page_range %}
+                                {% if i == page_obj.number %}
+                                <div class="item active">{{ i }}</div>
+                                {% else %}
+                                <a class="item" href="?page={{ i }}">{{ i }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).ready(function() {
+        var loadform = function() {
+            var btn = $(this);
+            $.ajax({
+                url: btn.attr('target-url'),
+                dataType: 'json',
+                beforeSend: function() {
+                    $('.ui.modal').modal('show');
+                },
+                success: function(data) {
+                    $('.ui.modal').html(data.html);
+                }
+            });
+            return false;
+        }
+
+        var postform = function() {
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                dataType: 'json',
+                data: form.serialize(),
+                success: function(data) {
+                    if (data.form_is_valid) {
+                        $('.ui.modal').modal('hide');
+                    } else {
+                        $('.ui.modal').html(data.html);
+                    }
+                }
+            });
+            return false;
+        }
+
+        $('#usertb').on('click', '.dropdown .item', loadform);
+        $('.ui.modal').on('submit', 'form', postform);
+    });
+</script>
+{% endblock %}
