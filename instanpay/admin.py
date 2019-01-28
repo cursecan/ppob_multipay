@@ -11,24 +11,25 @@ from .forms import (
     ProductForm
 )
 
-from .resources import ProductResource
+from .resources import ProductResource, OperatorResource, GroupResource
 
 class PrefixInline(admin.TabularInline):
     model = Prefix
     extra = 1
 
 @admin.register(Group)
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(ImportExportModelAdmin):
     list_display = [
         'group_name'
     ]
     form = GroupForm
     list_per_page = 20
     list_max_show_all = 100
+    resource_class = GroupResource
 
 
 @admin.register(Operator)
-class OperatorAdmin(admin.ModelAdmin):
+class OperatorAdmin(ImportExportModelAdmin):
     list_display = [
         'operator_name'
     ]
@@ -38,6 +39,7 @@ class OperatorAdmin(admin.ModelAdmin):
     ]
     list_per_page = 20
     list_max_show_all = 100
+    resource_class = OperatorResource
 
 
 @admin.register(Product)

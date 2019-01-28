@@ -31,13 +31,38 @@ class ProductResource(resources.ModelResource):
         skip_unchanged = True
         report_skipped = False
 
-# subtype = models.CharField(max_length=1, choices=SUBTYPE_LIST, default=INSTAN)
-# code = models.CharField(max_length=20, unique=True)
-# product_name = models.CharField(max_length=200)
-# group = models.ForeignKey(Group, on_delete=models.CASCADE)
-# operator = models.ForeignKey(Operator, on_delete=models.CASCADE)
-# price = models.DecimalField(max_digits=12, decimal_places=2)
-# commision = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-# nominal = models.PositiveIntegerField(default=0)
-# extend_server = models.OneToOneField(ExtraServer, on_delete=models.CASCADE, blank=True, null=True)
-# is_active = models.BooleanField(default=False)
+
+class GroupResource(resources.ModelResource):
+    class Meta:
+        model = Group
+        field = [
+            'slug', 'group_name'
+        ]
+        export_order = [
+            'slug', 'group_name'
+        ]
+        import_id_fields = ['slug']
+        skip_unchanged = True
+        report_skipped = False
+
+
+class OperatorResource(resources.ModelResource):
+    group = resources.Field(
+        attribute='group', column_name='group',
+        widget=ForeignKeyWidget(Group, 'slug')
+    )
+
+    class Meta:
+        model = Operator
+        fields = [
+            'slug', 'operator_name',
+            'grup'
+        ]
+        export_order = [
+            'slug', 'operator_name',
+            'grup'
+        ]
+        import_id_fields = ['slug']
+        skip_unchanged = True
+        report_skipped = False
+
