@@ -56,11 +56,11 @@ class OperatorResource(resources.ModelResource):
         model = Operator
         fields = [
             'slug', 'operator_name',
-            'grup'
+            'group'
         ]
         export_order = [
             'slug', 'operator_name',
-            'grup'
+            'group'
         ]
         import_id_fields = ['slug']
         skip_unchanged = True
