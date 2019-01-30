@@ -1,5 +1,5 @@
 from import_export import resources, fields
-from import_export.widgets import ForeignKeyWidget
+from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 
 from .models import (
     Product, Group, Operator
@@ -49,7 +49,7 @@ class GroupResource(resources.ModelResource):
 class OperatorResource(resources.ModelResource):
     group = resources.Field(
         attribute='group', column_name='group',
-        widget=ForeignKeyWidget(Group, 'slug')
+        widget=ManyToManyWidget(model=Group, field='slug')
     )
 
     class Meta:

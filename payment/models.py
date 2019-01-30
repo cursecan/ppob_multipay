@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 
 from core.models import CommonBase
 
-
+# Ini digunakan juka user bayar kepada agen dan kelebihan bayar.
+# Kelebihan akan dijadikan saldo diambil dari saldo agen.
+# Transafer saldo
 class Payment(CommonBase):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name='receiver')

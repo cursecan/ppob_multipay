@@ -15,6 +15,9 @@ def initial_user_create(sender, instance, created, **kwargs):
         profile_obj = Profile.objects.create(
             user = instance,
         )
+        profile_obj.leader = profile_obj
+        profile_obj.save()
+        
 
         # Wallet create
         Wallet.objects.create(

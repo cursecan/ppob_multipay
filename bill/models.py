@@ -16,7 +16,7 @@ class Billing(CommonBase):
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     seq = models.PositiveSmallIntegerField(default=1)
     prev_bill = models.OneToOneField('self', on_delete=models.CASCADE, blank=True, null=True)
-    payment = models.OneToOneField(Payment, on_delete=models.CASCADE, blank=True, null=True)
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE, blank=True, null=True, related_name='bil_payment')
     kliring = models.OneToOneField('Kliring', on_delete=models.CASCADE, blank=True, null=True)
     instanpay_trx = models.ForeignKey(Transaction, on_delete=models.CASCADE, blank=True, null=True)
     ppob_trx = models.ForeignKey(PpobTransaction, on_delete=models.CASCADE, blank=True, null=True)

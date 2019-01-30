@@ -20,6 +20,13 @@ class Profile(models.Model):
             'user__username'
         ]
 
+    # def save(self, *args, **kwargs):
+    #     if self.leader is None :
+    #         super(Profile, self).save(*args, **kwargs)
+    #         self.leader = self
+    #     super(Profile, self).save(*args, **kwargs)
+        
+
     def __str__(self):
         return self.user.username
 

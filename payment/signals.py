@@ -14,8 +14,13 @@ from userprofile.models import Wallet
 def record_payment(sender, instance, created, **kwargs):
     if created:
         Billing.objects.create(
-            user = instance.sender, 
+            user = instance.receiver, 
             debit = instance.amount, 
+            payment = instance
+        )
+        Billing.objects.create(
+            user = instance.sender,
+            credit = instance.amount,
             payment = instance
         )
 
@@ -29,8 +34,8 @@ def extra_kliring_payment(sender, instance, created, **kwargs):
         if instance.extra_pay > 0:
             Payment.objects.create(
                 amount = instance.extra_pay,
-                sender = instance.sender,
-                receiver = instance.receiver,
+                sender = instance.receiver,
+                receiver = instance.sender,
                 kliring_payment = instance,
                 description = "Payment cause from extra kliring payment."
             )
