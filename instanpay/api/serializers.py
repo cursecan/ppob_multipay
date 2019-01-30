@@ -67,7 +67,7 @@ class TopUpSerializer(serializers.Serializer):
 
         if not product_exists:
             raise serializers.ValidationError({
-                'code': 'Product code not found or inactive product.'
+                'error': 'Product code not found or inactive product.'
             })
 
         return data
@@ -117,13 +117,13 @@ class TopUpRequestSerializer(TopUpSerializer, serializers.ModelSerializer):
             unpay = product_obj.price - user_obj.wallet.saldo
             if user_obj.wallet.loan + unpay > user_obj.wallet.limit:
                 raise serializers.ValidationError({
-                    'user': 'User wallet on limit.'
+                    'error': 'User wallet on limit.'
                 })
             else:
                 leader = user_obj.profile.leader
                 if leader.wallet.saldo < product_obj.price:
                     raise serializers.ValidationError({
-                        'user': 'Leader wallet on limit.'
+                        'error': 'Leader wallet on limit.'
                     })
 
         # Duplication Validation

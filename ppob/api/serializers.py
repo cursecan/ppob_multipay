@@ -29,7 +29,7 @@ class TopupPpobSerializer(serializers.Serializer):
         product_obj = Product.objects.filter(code=code, is_active=True, subtype='Q')
         if not product_obj.exists():
             raise serializers.ValidationError({
-                'code': 'Product not found or inactive'
+                'error': 'Product not found or inactive'
             })
 
         return data
@@ -96,26 +96,26 @@ class TopupPpobRequestSerializer(TopupPpobSerializer, serializers.ModelSerialize
             inquery_obj = Transaction.objects.filter(subtype='INQ', trx_code=inquery_code)
             if not inquery_obj.exists():
                 raise serializers.ValidationError({
-                    'inquery_code':'Inquery not found.'
+                    'error':'Inquery not found.'
                 })
 
             # Saldo Validation
             if user_obj.wallet.saldo < product_obj.price:
                 # Inquery payment cannot be loan
                 raise serializers.ValidationError({
-                    'user': 'Direct error your saldo not enough.'
+                    'error': 'Direct saldo not enough.'
                 })
 
                 unpay = product_obj.price - user_obj.wallet.saldo
                 if user_obj.wallet.loan + unpay > user_obj.wallet.limit:
                     raise serializers.ValidationError({
-                        'user': 'User wallet on limit.'
+                        'error': 'User wallet on limit.'
                     })
                 else:
                     leader = user_obj.profile.leader
                     if leader.wallet.saldo < product_obj.price:
                         raise serializers.ValidationError({
-                            'user': 'Leader wallet on limit.'
+                            'error': 'Leader wallet on limit.'
                         })
 
             # Duplication Validation

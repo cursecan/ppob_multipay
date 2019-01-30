@@ -1,5 +1,5 @@
 from rest_framework.generics import (
-    ListAPIView, RetrieveAPIView
+    ListAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView
 )
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -21,4 +21,16 @@ class GetMeAPIView(APIView):
     def get(self, request, *args, **kwargs):
         serializers = ProfileSerializer(request.user.profile)
         return Response(serializers.data)
+
+
+class UpdateLimitAPIView(UpdateAPIView):
+    serializer_class = UpdateLimitSerializer
+    lookup_url_kwarg = 'guid'
+    lookup_field = 'guid'
+
+    def get_queryset(self):
+        return Profile.objects.filter(leader__user=self.request.user)
+    
+    
+    
         

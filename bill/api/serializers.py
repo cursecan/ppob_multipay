@@ -1,8 +1,6 @@
 from rest_framework import serializers
 
-
 from bill.models import Billing
-
 
 class BillingSerializer(serializers.ModelSerializer):
     data = serializers.SerializerMethodField()
