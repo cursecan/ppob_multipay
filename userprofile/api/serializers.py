@@ -1,9 +1,9 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
 from userprofile.models import (
     Profile, Wallet
 )
-
 
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField(read_only=True)
