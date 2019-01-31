@@ -143,14 +143,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 100
 }
 
-# JWT Auth
-# https://getblimp.github.io/django-rest-framework-jwt/
-
-JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
-}
 
 # Django Import Export
 # https://django-import-export.readthedocs.io/en/latest/getting_started.html#creating-import-export-resource

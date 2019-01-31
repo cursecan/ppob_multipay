@@ -5,6 +5,15 @@ DEBUG = False
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
+
+# JWT Auth
+# https://getblimp.github.io/django-rest-framework-jwt/
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=config('JWT_EXP', cast=int)),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=config('JWT_REFRESH_EXP', cast=int)),
+}
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
