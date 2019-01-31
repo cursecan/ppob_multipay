@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.db.models import Q, F
 
 from core.models import CommonBase
-from payment.models import Payment
+from payment.models import (
+    Payment, KlirPayment
+)
 from instanpay.models import Transaction
 from ppob.models import Transaction as PpobTransaction
 
@@ -52,6 +54,7 @@ class Billing(CommonBase):
 # Kliring Manager with No payment
 class UnCleanKliringManager(models.Manager):
     def get_queryset(self):
+        # Jika loan == payment artinya user sudah melunasi
         return super(UnCleanKliringManager, self).get_queryset().filter(
             Q(ppob_trx__status__in=['OP', 'PR', 'CO']) | Q(instanpay_trx__status__in=['OP', 'PR', 'CO'])
         ).exclude(loan=F('payment'))
@@ -66,8 +69,8 @@ class Kliring(CommonBase):
     prev_kliring = models.OneToOneField('self', on_delete=models.CASCADE, blank=True, null=True)
     seq = models.PositiveSmallIntegerField(default=1)
     loan = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    payment = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    flag = models.ForeignKey('FlagKliring', on_delete=models.CASCADE, blank=True, null=True)
+    payment = models.DecimalField(max_digits=12, decimal_places=2, default=0) # payment >0 artinya user usdah melunasi
+    flag = models.ForeignKey(KlirPayment, on_delete=models.CASCADE, blank=True, null=True) # Flag jika sudah lunas
 
     objects = models.Manager()
     unclean_objects = UnCleanKliringManager()
@@ -102,16 +105,6 @@ class Profit(CommonBase):
     commision = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     witdraw = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     return_back = models.BooleanField(default=False)
-
-    class Meta:
-        ordering = ['-id']
-
-
-# Peyment Kliring Record
-class FlagKliring(CommonBase):
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='f_buyer')
-    leader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='f_leader')
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
         ordering = ['-id']

@@ -31,4 +31,5 @@ class KlirPayment(CommonBase):
     class Meta:
         ordering = ['-id']
 
-    
+    def __str__(self):
+        return '%s %s %d' %(self.sender.email, self.receiver.email, self.pay)

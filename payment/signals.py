@@ -6,7 +6,9 @@ from .models import (
     Payment, KlirPayment
 )
 
-from bill.models import Billing
+from bill.models import (
+    Billing, Kliring
+)
 from userprofile.models import Wallet
 
 
@@ -31,6 +33,15 @@ def extra_kliring_payment(sender, instance, created, **kwargs):
         Wallet.objects.filter(user=instance.sender).update(
             loan = F('loan') - instance.pay
         )
+
+        Kliring.unclean_objects.filter(
+            buyer = instance.sender,
+            leader = instance.receiver
+        ).update(
+            payment = F('loan'),
+            flag = instance
+        )
+
         if instance.extra_pay > 0:
             Payment.objects.create(
                 amount = instance.extra_pay,

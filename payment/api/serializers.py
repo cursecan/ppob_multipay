@@ -1,8 +1,12 @@
 from rest_framework import serializers
+from django.db.models import Sum, Value as V
+from django.db.models.functions import Coalesce
 
-from payment.models import Payment
+from payment.models import (
+    Payment, KlirPayment
+)
 from userprofile.models import Profile
-
+from bill.models import Kliring
 
 class SaldoTransferSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(write_only=True)
@@ -51,3 +55,31 @@ class SaldoTransferSerializer(serializers.ModelSerializer):
             amount = nominal,
         )
         return payment_obj
+
+
+class KliringPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KlirPayment
+        fields = [
+            'id',
+            'sender', 'receiver',
+            'pay', 'extra_pay',
+            'timestamp'
+        ]
+
+    def validate(self, data):
+        sender = data.get('sender')
+        receiver = data.get('receiver')
+        pay = data.get('pay')
+
+        kliring_obj = Kliring.unclean_objects.filter(leader=receiver, buyer=sender)
+        total = kliring_obj.aggregate(t_loan = Coalesce(Sum('loan'), V(0)))
+        if total['t_loan'] == 0:
+            raise serializers.ValidationError({
+                'error': 'User does not has loan.'
+            })
+        if pay != total['t_loan']:
+            raise serializers.ValidationError({
+                'error': 'Pay value does not match with loan record value.'
+            })
+        return data

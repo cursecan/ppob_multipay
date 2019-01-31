@@ -5,7 +5,7 @@ from django.db.models import F
 from userprofile.models import Wallet
 
 from .models import (
-    Billing, Kliring, Profit, FlagKliring
+    Billing, Kliring, Profit
 )
 
 # Billing Signaling
@@ -50,12 +50,3 @@ def update_commision(sender, instance, created, update_fields, **kwargs):
                 Wallet.objects.filter(user=instance.leader).update(
                     commision = F('commision') - instance.commision
                 )
-
-# Flag Kliiring Signaling
-@receiver(post_save, sender=FlagKliring)
-def flag_kliring_triger(sender, instance, created, **kwargs):
-    if created:
-        # Update wallet loan to user cause loan payment
-        Wallet.objects.filter(user=instance.buyer).update(
-            loan = F('loan') - instance.amount
-        )

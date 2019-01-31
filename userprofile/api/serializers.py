@@ -15,7 +15,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'guid',
             'email', 'saldo', 'limit', 
-            'amount'
         ]
 
     def get_email(self, obj):
@@ -36,3 +35,5 @@ class UpdateLimitSerializer(ProfileSerializer, serializers.Serializer):
             limit=validated_data.get('amount')
         )
         return super().update(instance, validated_data)
+
+

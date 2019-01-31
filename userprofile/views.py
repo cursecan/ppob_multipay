@@ -14,7 +14,7 @@ from .models import (
     Wallet, Profile
 )
 from bill.models import (
-    Kliring, FlagKliring
+    Kliring
 )
 from .forms import LimitForm
 from core.decorators import superuser_required
@@ -55,53 +55,6 @@ class ProfileControl(ListView):
         )
         return queryset
 
-
-# Detail Profile - Agen
-# =====================
-class ProfileDetailControlView(SingleObjectMixin, ListView):
-    template_name = 'userprofile/pg-profile-detail-control.html'
-    slug_url_kwarg = 'guid'
-    slug_field = 'guid'
-    paginate_by = 10
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object(queryset=Profile.objects.all())
-        return super().get(request, *args, **kwargs)
-
-    def get_object(self, queryset, *args, **kwargs):
-        obj = super(ProfileDetailControlView, self).get_object(queryset, *args, **kwargs)
-        return obj
-
-    def get_queryset(self):
-        queryset_obj = Kliring.unclean_objects.filter(
-            seq=1, buyer=self.object.user, leader=self.request.user, flag__isnull=True
-        )
-        return queryset_obj
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(ProfileDetailControlView, self).get_context_data(*args, **kwargs)
-        kliring_res_obj = self.get_queryset().aggregate(total=Coalesce(Sum('loan'), V(0)))
-        
-        context['kliring_list'] = self.get_queryset()
-        context['total_loan'] = kliring_res_obj.get('total')
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object(queryset=Profile.objects.all())
-        klir_objs = self.get_queryset()
-        klir_ammount = klir_objs.aggregate(total=Coalesce(Sum('loan'), V(0)))
-        if klir_ammount.get('total') > 0:
-            flag_obj = FlagKliring.objects.create(
-                amount = klir_ammount.get('total'),
-                buyer = self.object.user,
-                leader = request.user
-            )
-            klir_objs.update(
-                flag = flag_obj
-            )
-        return redirect('userprofile:user_control')
-
-        
 
 
 
